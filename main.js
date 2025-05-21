@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameInterval;
     const scoreEl = document.getElementById('score');
     const startBtn = document.getElementById('startBtn');
+    const gameOverEl = document.getElementById('gameOver');
+    const container = document.querySelector('.game-container');
+    let isGameOver = false;
 
     const drawCell = (x, y, color) => {
         ctx.fillStyle = color;
@@ -76,11 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreEl.textContent = 'Score: 0';
         clearInterval(gameInterval);
         gameInterval = setInterval(move, speed);
+        startBtn.classList.add('hidden');
+        gameOverEl.classList.add('hidden');
+        isGameOver = false;
     };
 
     const stopGame = () => {
         clearInterval(gameInterval);
-        alert(`Game over! Score: ${score}`);
+        gameOverEl.textContent = `Game Over! Score: ${score}`;
+        gameOverEl.classList.remove('hidden');
+        isGameOver = true;
     };
 
     document.addEventListener('keydown', e => {
@@ -111,6 +119,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    startBtn.addEventListener('click', startGame);
+    startBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        startGame();
+    });
+
+    const showStart = () => {
+        gameOverEl.classList.add('hidden');
+        startBtn.classList.remove('hidden');
+    };
+
+    container.addEventListener('click', () => {
+        if (isGameOver) showStart();
+    });
+    container.addEventListener('touchstart', () => {
+        if (isGameOver) showStart();
+    });
+
     draw();
 });
