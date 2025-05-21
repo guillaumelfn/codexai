@@ -6,19 +6,53 @@ body, html {
     font-family: sans-serif;
     height: 100%;
 }
+
 .game-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
 }
+
 canvas {
     border: 2px solid #0f0;
     image-rendering: pixelated;
 }
-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
+
+#score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+#startBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px;
+    font-size: 2rem;
+    animation: flash 2s infinite;
+    z-index: 10;
+}
+
+#gameOver {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: #f00;
+    z-index: 10;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes flash {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
 }
