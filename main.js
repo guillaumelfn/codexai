@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const scaleCanvas = () => {
         const minSide = Math.min(window.innerWidth, window.innerHeight);
-        const scale = minSide / canvas.width;
-        canvas.style.transform = `scale(${scale})`;
+        canvas.style.width = `${minSide}px`;
+        canvas.style.height = `${minSide}px`;
     };
     window.addEventListener('resize', scaleCanvas);
     scaleCanvas();
