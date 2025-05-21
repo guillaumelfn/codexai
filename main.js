@@ -102,22 +102,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    let touchStartX, touchStartY;
-    canvas.addEventListener('touchstart', e => {
-        const t = e.touches[0];
-        touchStartX = t.clientX;
-        touchStartY = t.clientY;
-    });
-    canvas.addEventListener('touchend', e => {
-        const t = e.changedTouches[0];
-        const dx = t.clientX - touchStartX;
-        const dy = t.clientY - touchStartY;
+    const handleTouch = e => {
+        const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
+        if (!t) return;
+        const rect = canvas.getBoundingClientRect();
+        const relX = (t.clientX - rect.left) / rect.width;
+        const relY = (t.clientY - rect.top) / rect.height;
+        const head = snake[0];
+        const headX = (head.x + 0.5) / gridSize;
+        const headY = (head.y + 0.5) / gridSize;
+        const dx = relX - headX;
+        const dy = relY - headY;
+        let newDir;
         if (Math.abs(dx) > Math.abs(dy)) {
-            dir = dx > 0 ? directions.ArrowRight : directions.ArrowLeft;
+            newDir = dx > 0 ? directions.ArrowRight : directions.ArrowLeft;
         } else {
-            dir = dy > 0 ? directions.ArrowDown : directions.ArrowUp;
+            newDir = dy > 0 ? directions.ArrowDown : directions.ArrowUp;
         }
-    });
+        if (snake.length > 1) {
+            const next = {x: head.x + newDir.x, y: head.y + newDir.y};
+            if (next.x === snake[1].x && next.y === snake[1].y) return;
+        }
+        dir = newDir;
+    };
+
+    canvas.addEventListener('touchstart', handleTouch);
 
     startBtn.addEventListener('click', e => {
         e.stopPropagation();
